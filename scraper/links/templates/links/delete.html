@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+    <div class="text-center">
+        <p>
+            Are you sure you want to delete this item?
+            <p>
+                <br>
+                    <a href="{{object.url}}" target="_blank">{{object.url}}</a>
+                <br>
+
+            <form method="post">
+                {% csrf_token %}        
+                <button type="submit" class="btn btn-danger">
+                    Delete item
+                </button>
+                <a href="{% url 'links:tracker' %}"></a>
+                <button type="submit" class="btn btn-primary">
+                    Go Back
+                </button>
+            </form>
+
+    </div>
+
+
+{% endblock %}

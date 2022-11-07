@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+<form method="POST">
+    {% csrf_token %}
+    &nbsp;
+
+    {% include 'links/messages.html' %}
+
+    <div class="mt-9 ml-3">
+        Don't have an account? <a href=" {% url 'accounts:signup' %} ">Signup!</a> 
+    </div>
+    <br>
+
+    <div class="col-6">
+        {{form|crispy}}
+
+    </div>
+    
+    <button type="submit" class="btn btn-primary ml-3">
+        Login
+    </button>
+</form>
+
+
+
+{% endblock %}

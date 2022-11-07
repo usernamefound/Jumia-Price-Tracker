@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+<div class="row-md">
+    
+<!-- Button trigger modal -->
+<div class="ml-3">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addItemMoal ">
+    Add a new item
+  </button>
+  &nbsp;
+  <a href="{% url 'links:refresh-prices' %}">
+    <button type="button" class="btn btn-info">
+        Refresh prices
+      </button>
+  </a>
+  
+  
+  <!-- Modal -->
+  <div class="modal fade" id="addItemMoal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add a new item to track</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body border-success">
+            
+            <form class="ml-4" method="POST" autocomplete="off">
+                {%csrf_token %}
+                {{form|crispy}}
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+            </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<br>
+&nbsp;
+      {% include 'links/messages.html' %}
+
+<div class="card border-success mt-3">
+    <div class="card-block mt-3 ml-3">
+      <h4 class="card-title">Your items</h4>
+      <div>Total items being tracked:
+        <h3 class="badge badge-primary badge-pill "> {{num_items}}</h3>
+      </div>
+            <br>
+        <div>Total items discounted:
+            <h3 class="badge badge-danger badge-pill">{{discounted_items}}</h3>
+        </div>
+            
+         
+    </p>
+    </div>
+  </div>
+</div>
+
+
+    {% if link %}
+        {% for url in link %}
+        <div class="card mt-3">
+            <div class="card-header">
+                <div class="p-3 mb-2 bg-dark text-white">{{url.title}}</div>
+
+            </div>
+            <div class="card-body">
+                <div class="blockquote">
+                    <div>
+                        Current price (DHS): 
+                        <strong>{{url.current_price}}</strong>
+                    </div>
+                    <br>
+                    <div>
+                        Previous price (DHS):
+                        <strong>{{url.old_price}}</strong>
+
+                    </div>
+                    <br>
+                    <div>Price Difference (DHS): 
+                        <strong>{{url.price_difference}}</strong>
+                    </div>
+                    <br>
+                    <div>
+                        Item was added: 
+                        <strong>{{url.created|timesince}}</strong> ago
+                    </div>
+                    <div>
+                        Last updated: 
+                            {% if url.updated|timesince == url.created|timesince %} 
+                                <strong>No updates yet...</strong> 
+                            {% else %}
+                                <strong>{{url.updated|timesince}} ago</strong>
+                            {% endif %}
+                    </div>
+                    <br>
+
+                    <div>
+                        Item Link: <a href="{{url.url}}" target="_blank">{{url.title}}</a>
+                        <div>
+                            <br>
+                                <a class="text-white" href="{% url 'links:deleteitem' url.id %}">
+                                    <button type="submit" class="btn btn-danger">
+                                        Delete this item</a> 
+                                    </button>
+                                </a>
+                                
+                                                      
+                        </div>
+                      
+                         
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+    <br>
+
+        <p class="ml-3">No items are being tracked.</p>
+
+    {% endif %}
+
+
+    <script>
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
+    </script>
+
+
+
+
+
+
+
+{% endblock %}
